@@ -9,4 +9,6 @@ locals {
       "Environment" = var.environment
     },
   )
+
+  s3_bucket_name = var.s3_bucket_name == "" ? "${var.s3_bucket_name_prefix}-${var.environment}-${var.aws_region}"  : var.s3_bucket_name
 }

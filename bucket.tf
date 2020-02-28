@@ -4,7 +4,7 @@
 resource "aws_s3_bucket" "bucket" {
   count = var.enabled ? 1 : 0
 
-  bucket = var.s3_bucket_name == "" ? "${var.s3_bucket_name_prefix}-${var.environment}-${var.aws_region}"  : var.s3_bucket_name
+  bucket = local.s3_bucket_name
   acl    = var.s3_acl
 
   versioning {
@@ -14,8 +14,8 @@ resource "aws_s3_bucket" "bucket" {
   dynamic "logging" {
     for_each = var.s3_logging_enabled ? [1] : []
     content {
-      target_bucket = "exzeo-logging-${var.environment}-${var.aws_region}"
-      target_prefix = "s3/${var.s3_bucket_name}/"
+      target_bucket = var.s3_logging_bucket_name
+      target_prefix = "s3/${local.s3_bucket_name}/"
     }
   }
 

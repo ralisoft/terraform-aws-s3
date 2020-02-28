@@ -40,6 +40,12 @@ variable "s3_logging_enabled" {
   default = true
 }
 
+variable "s3_logging_bucket_name" {
+  type        = string
+
+  default = ""
+}
+
 variable "s3_public_access" {
   type    = bool
   default = false
