@@ -12,6 +12,14 @@ variable "aws_region" {
 # --------------------------------------------------------------
 variable "s3_bucket_name" {
   type = string
+
+  default = ""
+}
+
+variable "s3_bucket_name_prefix" {
+  type = string
+
+  default = ""
 }
 
 variable "s3_acl" {

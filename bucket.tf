@@ -4,7 +4,7 @@
 resource "aws_s3_bucket" "bucket" {
   count = var.enabled ? 1 : 0
 
-  bucket = var.s3_bucket_name
+  bucket = var.s3_bucket_name == "" ? "${var.s3_bucket_name_prefix}-${var.environment}-${var.aws_region}"  : var.s3_bucket_name
   acl    = var.s3_acl
 
   versioning {
