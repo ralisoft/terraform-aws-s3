@@ -52,9 +52,9 @@ variable "s3_public_access" {
 }
 
 variable "s3_bucket_policy" {
-  type = string
+  type = list(any)
 
-  default = ""
+  default = []
 }
 
 variable "s3_lifecycle_rules" {
