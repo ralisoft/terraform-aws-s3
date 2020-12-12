@@ -60,6 +60,24 @@ variable "s3_lifecycle_rules" {
   default = []
 }
 
+variable "s3_website_enabled" {
+  type = bool
+
+  default = false
+}
+
+variable "s3_website_index_document" {
+  type = string
+
+  default = "index.html"
+}
+
+variable "s3_website_error_document" {
+  type = string
+
+  default = "404.html"
+}
+
 # --------------------------------------------------------------
 #  Misc
 # --------------------------------------------------------------

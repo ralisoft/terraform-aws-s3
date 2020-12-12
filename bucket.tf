@@ -19,6 +19,14 @@ resource "aws_s3_bucket" "bucket" {
     }
   }
 
+  dynamic "website" {
+    for_each = var.s3_website_enabled ? [1] : []
+    content {
+      index_document = var.s3_website_index_document
+      error_document = var.s3_website_error_document
+    }
+  }
+
   dynamic "lifecycle_rule" {
     for_each = var.s3_lifecycle_rules
     content {
@@ -74,4 +82,12 @@ output "hosted_zone_id" {
 
 output "region" {
   value = var.enabled ? aws_s3_bucket.bucket[0].region : ""
+}
+
+output "website_endpoint" {
+  value = var.s3_website_enabled ? aws_s3_bucket.bucket[0].website_endpoint : ""
+}
+
+output "website_domain" {
+  value = var.s3_website_enabled ? aws_s3_bucket.bucket[0].website_domain : ""
 }
