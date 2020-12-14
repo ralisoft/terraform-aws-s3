@@ -20,7 +20,7 @@ locals {
         "Effect": "Deny",
         "Principal": "*",
         "Action": "s3:*",
-        "Resource": "arn:aws:s3:::${local.s3_react_bucket_name}/*",
+        "Resource": "arn:aws:s3:::${local.s3_bucket_name}/*",
         "Condition": {
           "Bool": {
             "aws:SecureTransport": "false"
