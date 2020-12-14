@@ -6,5 +6,22 @@ resource "aws_s3_bucket_policy" "bucket" {
 
   bucket = aws_s3_bucket.bucket[0].id
 
-  policy = var.s3_bucket_policy == "" ? var.s3_bucket_policy : local.s3_bucket_policy
+  policy = <<EOF
+{
+    "Version": "2008-10-17",
+    "Statement": [
+      {
+        "Effect": "Deny",
+        "Principal": "*",
+        "Action": "s3:*",
+        "Resource": "arn:aws:s3:::${local.s3_bucket_name}/*",
+        "Condition": {
+          "Bool": {
+            "aws:SecureTransport": "false"
+          }
+        }
+      }      
+    ]
+  }
+  EOF
 }
