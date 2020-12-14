@@ -6,5 +6,5 @@ resource "aws_s3_bucket_policy" "bucket" {
 
   bucket = aws_s3_bucket.bucket[0].id
 
-  policy = var.s3_bucket_policy
+  policy = var.s3_bucket_policy == "" ? var.s3_bucket_policy : local.s3_bucket_policy
 }

@@ -53,6 +53,8 @@ variable "s3_public_access" {
 
 variable "s3_bucket_policy" {
   type = string
+
+  default = ""
 }
 
 variable "s3_lifecycle_rules" {
