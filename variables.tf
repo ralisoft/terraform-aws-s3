@@ -31,13 +31,13 @@ variable "s3_acl" {
 variable "s3_versioning_enabled" {
   type = bool
 
-  default = true
+  default = false
 }
 
 variable "s3_logging_enabled" {
   type = bool
 
-  default = true
+  default = false
 }
 
 variable "s3_logging_bucket_name" {
