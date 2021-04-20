@@ -1,24 +1,20 @@
-# --------------------------------------------------------------
-#  AWS
-# --------------------------------------------------------------
+##  AWS Variables
 variable "aws_region" {
   type = string
-
-  default = "us-east-1"
 }
 
-# --------------------------------------------------------------
-#  S3
-# --------------------------------------------------------------
-variable "s3_bucket_name" {
+variable "aws_account" {
   type = string
+}
 
+## S3 Variables
+variable "s3_bucket_name" {
+  type    = string
   default = ""
 }
 
-variable "s3_bucket_name_prefix" {
-  type = string
-
+variable "s3_bucket_prefix" {
+  type    = string
   default = ""
 }
 
@@ -28,73 +24,63 @@ variable "s3_acl" {
   default = "private"
 }
 
-variable "s3_versioning_enabled" {
-  type = bool
-
-  default = false
-}
-
-variable "s3_logging_enabled" {
-  type = bool
-
-  default = false
-}
-
-variable "s3_logging_bucket_name" {
-  type        = string
-
-  default = ""
-}
-
 variable "s3_public_access" {
   type    = bool
   default = false
 }
 
-variable "s3_bucket_policy" {
-  type = string
+variable "s3_encryption_enabled" {
+  type = bool
 
-  default = ""
+  default = true
 }
 
-variable "s3_lifecycle_rules" {
-  type    = list
-  default = []
-}
-
-variable "s3_website_enabled" {
+variable "s3_require_encryption_enabled" {
   type = bool
 
   default = false
 }
 
-variable "s3_website_index_document" {
-  type = string
-
-  default = "index.html"
-}
-
-variable "s3_website_error_document" {
-  type = string
-
-  default = "404.html"
-}
-
-# --------------------------------------------------------------
-#  Misc
-# --------------------------------------------------------------
-variable "tags" {
-  type = map
+variable "s3_versioning" {
+  type = map(any)
 
   default = {}
 }
 
-variable "environment" {
-  type = string
+variable "s3_logging" {
+  type = map(any)
+
+  default = {}
 }
 
-variable "enabled" {
-  type = bool
+variable "s3_website" {
+  type = map(any)
 
-  default = true
+  default = {}
+}
+
+variable "s3_lifecycle_rule" {
+  type = list(any)
+
+  default = []
+}
+
+## S3 Policy
+variable "s3_bucket_policy" {
+  type = list(string)
+
+  default = []
+}
+
+variable "s3_cloudfront_identities" {
+  type = list(string)
+
+  default = []
+}
+
+## Misc
+variable "tags" {
+  type = map(any)
+
+  default = {}
 }

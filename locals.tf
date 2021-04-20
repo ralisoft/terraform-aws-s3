@@ -1,33 +1,18 @@
 #--------------------------------------------------------------
-# Local Variables
+# locals - common variables
 #--------------------------------------------------------------
 locals {
-  tags = merge(
-    var.tags,
-    {
-      "ManagedBy"   = data.aws_caller_identity.current.arn
-      "Environment" = var.environment
-    },
-  )
+  tags = merge(var.tags, var.s3_public_access ? {} : { "Config" = "s3-bucket-public-read-prohibited" })
+}
 
-  s3_bucket_name = var.s3_bucket_name == "" ? "${var.s3_bucket_name_prefix}-${var.environment}-${var.aws_region}"  : var.s3_bucket_name
-
-  s3_bucket_policy = <<EOF
-{
-    "Version": "2008-10-17",
-    "Statement": [
-      {
-        "Effect": "Deny",
-        "Principal": "*",
-        "Action": "s3:*",
-        "Resource": "arn:aws:s3:::${local.s3_bucket_name}/*",
-        "Condition": {
-          "Bool": {
-            "aws:SecureTransport": "false"
-          }
-        }
-      }      
-    ]
+locals {
+  template_dir = "${path.module}/templates"
+  template_vars = {
+    encrypt               = var.s3_require_encryption_enabled
+    bucket_arn            = aws_s3_bucket.bucket.arn
+    extra_statements      = var.s3_bucket_policy
+    cloudfront_identities = var.s3_cloudfront_identities
   }
-  EOF
+  policy      = templatefile("${local.template_dir}/policy.tpl", local.template_vars)
+  bucket_name = var.s3_bucket_name != "" ? var.s3_bucket_name : "${var.aws_account}-${var.s3_bucket_prefix}-${var.aws_region}"
 }
