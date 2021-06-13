@@ -2,17 +2,45 @@
 # locals - common variables
 #--------------------------------------------------------------
 locals {
-  tags = merge(var.tags, var.s3_public_access ? {} : { "Config" = "s3-bucket-public-read-prohibited" })
-}
+  tags = merge(var.tags, {})
 
-locals {
   template_dir = "${path.module}/templates"
-  template_vars = {
-    encrypt               = var.s3_require_encryption_enabled
-    bucket_arn            = aws_s3_bucket.bucket.arn
-    extra_statements      = var.s3_bucket_policy
-    cloudfront_identities = var.s3_cloudfront_identities
+
+  aws_defaults = {
+    region : "us-east-1"
   }
-  policy      = templatefile("${local.template_dir}/policy.tpl", local.template_vars)
-  bucket_name = var.s3_bucket_name != "" ? var.s3_bucket_name : "${var.aws_account}-${var.s3_bucket_prefix}-${var.aws_region}"
+
+  s3_defaults = {
+    bucket : {
+      name : "${var.aws.account}-${var.s3.bucket.prefix}-${try(var.aws.region, local.aws_defaults.region)}"
+      acl : "private"
+      public_access : false
+    }
+
+    versioning : {
+      enabled : false
+      mfa_delete : false
+    }
+
+    logging : {
+      enabled : false
+      target_bucket : ""
+      target_prefix : "s3/${try(var.s3.bucket.name, "${var.aws.account}-${var.s3.bucket.prefix}-${try(var.aws.region, local.aws_defaults.region)}")}"
+    }
+
+    encryption : {
+      enabled : true
+      required : true
+      sse_algorithm : "AES256"
+    }
+
+    cloudfront : {
+      identities : []
+    }
+
+    policy : {
+      extra_statements : []
+    }
+
+  }
 }

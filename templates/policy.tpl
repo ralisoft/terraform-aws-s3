@@ -1,16 +1,16 @@
 {
     "Version": "2008-10-17",
     "Statement": [
-%{ if encrypt ~}
+%{ if encryption_required && encryption_enabled ~}
         {
             "Sid": "DenyIncorrectEncryptionHeader",
             "Effect": "Deny",
             "Principal": "*",
             "Action": "s3:PutObject",
-            "Resource": "${bucket_arn}/*",
+            "Resource": "${bucket.arn}/*",
             "Condition": {
                 "StringNotEquals": {
-                    "s3:x-amz-server-side-encryption": "AES256"
+                    "s3:x-amz-server-side-encryption": "${encryption_sse_algorithm}"
                 }
             }
         },
@@ -19,7 +19,7 @@
             "Effect": "Deny",
             "Principal": "*",
             "Action": "s3:PutObject",
-            "Resource": "${bucket_arn}/*",
+            "Resource": "${bucket.arn}/*",
             "Condition": {
                 "Null": {
                     "s3:x-amz-server-side-encryption": "true"
@@ -32,7 +32,7 @@
             "Effect" : "Deny",
             "Principal" : "*",
             "Action" : "s3:*",
-            "Resource" : "${bucket_arn}/*",
+            "Resource" : "${bucket.arn}/*",
             "Condition": {
                 "Bool": {
                     "aws:SecureTransport": "false"
@@ -54,7 +54,7 @@ ${statement}
                 "AWS": "${identity}"
             },
             "Action": "s3:GetObject",
-            "Resource": "${bucket_arn}/*"    
+            "Resource": "${bucket.arn}/*"    
         }
 %{ endfor ~}
     ]
